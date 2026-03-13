@@ -1,8 +1,9 @@
 import { Image } from "expo-image";
 import { useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 
 import ParallaxScrollView from "@/components/parallax-scroll-view";
+import { TerrorZoneCard } from "@/components/terror-zone-card";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 
@@ -19,10 +20,6 @@ type TerrorZone = {
 
 // TODO: 실제 기기에서 테스트할 때는 localhost 대신 맥의 로컬 IP로 변경하세요.
 const BFF_BASE_URL = "http://192.168.0.11:3000";
-
-function formatUnixTime(unixSeconds: number) {
-  return new Date(unixSeconds * 1000).toLocaleString();
-}
 
 export default function HomeScreen() {
   const [zones, setZones] = useState<TerrorZone[] | null>(null);
@@ -79,55 +76,9 @@ export default function HomeScreen() {
           </ThemedText>
         )}
 
-        {current && (
-          <ThemedView style={styles.card}>
-            <ThemedText type="subtitle" style={styles.cardLabel}>
-              현재 공포의 영역
-            </ThemedText>
-            <ThemedText type="title" style={styles.zoneName}>
-              {current.zone_name.join(" · ")}
-            </ThemedText>
+        {current && <TerrorZoneCard label="현재 공포의 영역" zone={current} />}
 
-            <View style={styles.row}>
-              <ThemedText type="defaultSemiBold">경험치</ThemedText>
-              <ThemedText>{current["tier-exp"]}</ThemedText>
-            </View>
-            <View style={styles.row}>
-              <ThemedText type="defaultSemiBold">드랍</ThemedText>
-              <ThemedText>{current["tier-loot"]}</ThemedText>
-            </View>
-            <View style={styles.row}>
-              <ThemedText type="defaultSemiBold">면역</ThemedText>
-              <ThemedText numberOfLines={1} ellipsizeMode="tail">
-                {current.immunities.join(", ")}
-              </ThemedText>
-            </View>
-            <View style={styles.row}>
-              <ThemedText type="defaultSemiBold">시간</ThemedText>
-              <ThemedText>
-                {formatUnixTime(current.time)} ~{" "}
-                {formatUnixTime(current.end_time)}
-              </ThemedText>
-            </View>
-          </ThemedView>
-        )}
-
-        {next && (
-          <ThemedView style={styles.cardSecondary}>
-            <ThemedText type="subtitle" style={styles.cardLabel}>
-              다음 공포의 영역 (예시)
-            </ThemedText>
-            <ThemedText type="defaultSemiBold" style={styles.zoneNameSecondary}>
-              {next.zone_name.join(" · ")}
-            </ThemedText>
-            <View style={styles.row}>
-              <ThemedText type="defaultSemiBold">경험치 / 드랍</ThemedText>
-              <ThemedText>
-                {next["tier-exp"]} / {next["tier-loot"]}
-              </ThemedText>
-            </View>
-          </ThemedView>
-        )}
+        {next && <TerrorZoneCard label="다음 공포의 영역" zone={next} />}
       </ThemedView>
     </ParallaxScrollView>
   );
@@ -143,34 +94,6 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: "#f97373",
-  },
-  card: {
-    borderRadius: 16,
-    padding: 16,
-    backgroundColor: "rgba(15,23,42,0.9)",
-    gap: 8,
-  },
-  cardSecondary: {
-    borderRadius: 16,
-    padding: 14,
-    backgroundColor: "rgba(15,23,42,0.5)",
-    gap: 6,
-  },
-  cardLabel: {
-    opacity: 0.8,
-    marginBottom: 4,
-  },
-  zoneName: {
-    marginBottom: 8,
-  },
-  zoneNameSecondary: {
-    marginBottom: 4,
-  },
-  row: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    gap: 8,
   },
   reactLogo: {
     height: 178,

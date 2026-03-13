@@ -1,4 +1,5 @@
 import { Image } from "expo-image";
+import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 
 import ParallaxScrollView from "@/components/parallax-scroll-view";
@@ -16,36 +17,39 @@ type TerrorZone = {
   end_time: number;
 };
 
-const MOCK_TERROR_ZONES: TerrorZone[] = [
-  {
-    time: 1769986800,
-    zone_name: ["Tal_Rashas_Tomb", "Tal_Rashas_Chamber"],
-    immunities: ["f", "c", "l", "p", "ph", "m"],
-    "tier-exp": "S",
-    "tier-loot": "A",
-    area_id: 66,
-    area_ids: [66, 67, 68, 69, 70, 71, 72, 73],
-    end_time: 1769990400,
-  },
-  {
-    time: 1769983200,
-    zone_name: ["Ancients_Way", "Icy_Cellar"],
-    immunities: ["c", "l", "p", "ph"],
-    "tier-exp": "C",
-    "tier-loot": "C",
-    area_id: 118,
-    area_ids: [118, 119],
-    end_time: 1769986800,
-  },
-];
+// TODO: 실제 기기에서 테스트할 때는 localhost 대신 맥의 로컬 IP로 변경하세요.
+const BFF_BASE_URL = "http://192.168.0.11:3000";
 
 function formatUnixTime(unixSeconds: number) {
   return new Date(unixSeconds * 1000).toLocaleString();
 }
 
 export default function HomeScreen() {
-  const current = MOCK_TERROR_ZONES[0];
-  const next = MOCK_TERROR_ZONES[1];
+  const [zones, setZones] = useState<TerrorZone[] | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchZones = async () => {
+      try {
+        setError(null);
+        const res = await fetch(`${BFF_BASE_URL}/api/tz/mock`);
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}`);
+        }
+        const json = (await res.json()) as TerrorZone[];
+        console.log(json);
+        setZones(json);
+      } catch (e) {
+        console.error(e);
+        setError("공포의 영역 정보를 불러오지 못했습니다.");
+      }
+    };
+
+    fetchZones();
+  }, []);
+
+  const current = zones?.[0];
+  const next = zones?.[1];
 
   return (
     <ParallaxScrollView
@@ -63,51 +67,67 @@ export default function HomeScreen() {
           Diablo II: Resurrected Terror Zone
         </ThemedText>
 
-        <ThemedView style={styles.card}>
-          <ThemedText type="subtitle" style={styles.cardLabel}>
-            현재 공포의 영역
+        {error && (
+          <ThemedText type="default" style={styles.errorText}>
+            {error}
           </ThemedText>
-          <ThemedText type="title" style={styles.zoneName}>
-            {current.zone_name.join(" · ")}
-          </ThemedText>
+        )}
 
-          <View style={styles.row}>
-            <ThemedText type="defaultSemiBold">경험치</ThemedText>
-            <ThemedText>{current["tier-exp"]}</ThemedText>
-          </View>
-          <View style={styles.row}>
-            <ThemedText type="defaultSemiBold">드랍</ThemedText>
-            <ThemedText>{current["tier-loot"]}</ThemedText>
-          </View>
-          <View style={styles.row}>
-            <ThemedText type="defaultSemiBold">면역</ThemedText>
-            <ThemedText numberOfLines={1} ellipsizeMode="tail">
-              {current.immunities.join(", ")}
-            </ThemedText>
-          </View>
-          <View style={styles.row}>
-            <ThemedText type="defaultSemiBold">시간</ThemedText>
-            <ThemedText>
-              {formatUnixTime(current.time)} ~{" "}
-              {formatUnixTime(current.end_time)}
-            </ThemedText>
-          </View>
-        </ThemedView>
+        {!zones && !error && (
+          <ThemedText type="default">
+            공포의 영역 정보를 불러오는 중...
+          </ThemedText>
+        )}
 
-        <ThemedView style={styles.cardSecondary}>
-          <ThemedText type="subtitle" style={styles.cardLabel}>
-            다음 공포의 영역 (예시)
-          </ThemedText>
-          <ThemedText type="defaultSemiBold" style={styles.zoneNameSecondary}>
-            {next.zone_name.join(" · ")}
-          </ThemedText>
-          <View style={styles.row}>
-            <ThemedText type="defaultSemiBold">경험치 / 드랍</ThemedText>
-            <ThemedText>
-              {next["tier-exp"]} / {next["tier-loot"]}
+        {current && (
+          <ThemedView style={styles.card}>
+            <ThemedText type="subtitle" style={styles.cardLabel}>
+              현재 공포의 영역
             </ThemedText>
-          </View>
-        </ThemedView>
+            <ThemedText type="title" style={styles.zoneName}>
+              {current.zone_name.join(" · ")}
+            </ThemedText>
+
+            <View style={styles.row}>
+              <ThemedText type="defaultSemiBold">경험치</ThemedText>
+              <ThemedText>{current["tier-exp"]}</ThemedText>
+            </View>
+            <View style={styles.row}>
+              <ThemedText type="defaultSemiBold">드랍</ThemedText>
+              <ThemedText>{current["tier-loot"]}</ThemedText>
+            </View>
+            <View style={styles.row}>
+              <ThemedText type="defaultSemiBold">면역</ThemedText>
+              <ThemedText numberOfLines={1} ellipsizeMode="tail">
+                {current.immunities.join(", ")}
+              </ThemedText>
+            </View>
+            <View style={styles.row}>
+              <ThemedText type="defaultSemiBold">시간</ThemedText>
+              <ThemedText>
+                {formatUnixTime(current.time)} ~{" "}
+                {formatUnixTime(current.end_time)}
+              </ThemedText>
+            </View>
+          </ThemedView>
+        )}
+
+        {next && (
+          <ThemedView style={styles.cardSecondary}>
+            <ThemedText type="subtitle" style={styles.cardLabel}>
+              다음 공포의 영역 (예시)
+            </ThemedText>
+            <ThemedText type="defaultSemiBold" style={styles.zoneNameSecondary}>
+              {next.zone_name.join(" · ")}
+            </ThemedText>
+            <View style={styles.row}>
+              <ThemedText type="defaultSemiBold">경험치 / 드랍</ThemedText>
+              <ThemedText>
+                {next["tier-exp"]} / {next["tier-loot"]}
+              </ThemedText>
+            </View>
+          </ThemedView>
+        )}
       </ThemedView>
     </ParallaxScrollView>
   );
@@ -120,6 +140,9 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     opacity: 0.7,
+  },
+  errorText: {
+    color: "#f97373",
   },
   card: {
     borderRadius: 16,

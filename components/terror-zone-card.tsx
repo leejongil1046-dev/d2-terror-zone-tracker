@@ -21,9 +21,14 @@ function formatUnixTime(unixSeconds: number) {
 type TerrorZoneCardProps = {
   label: string;
   zone: TerrorZone;
+  isCurrent?: boolean;
 };
 
-export function TerrorZoneCard({ label, zone }: TerrorZoneCardProps) {
+export function TerrorZoneCard({
+  label,
+  zone,
+  isCurrent,
+}: TerrorZoneCardProps) {
   const zoneKey = zone.zone_name[0]; // 예: "Blood_Moor"
   const koName = (areas as any)[zoneKey]?.ko ?? zoneKey.replaceAll("_", " ");
 
@@ -36,6 +41,8 @@ export function TerrorZoneCard({ label, zone }: TerrorZoneCardProps) {
       <ThemedText type="title" style={styles.zoneName}>
         {koName}
       </ThemedText>
+
+      {isCurrent && <ThemedText style={styles.remainingTime}>30:00</ThemedText>}
 
       <View style={styles.row}>
         <ThemedText type="defaultSemiBold">경험치</ThemedText>
@@ -89,6 +96,12 @@ const styles = StyleSheet.create({
   },
   zoneName: {
     marginBottom: 8,
+  },
+  remainingTime: {
+    marginBottom: 8,
+    fontSize: 80,
+    lineHeight: 80,
+    fontWeight: "500",
   },
   row: {
     flexDirection: "row",

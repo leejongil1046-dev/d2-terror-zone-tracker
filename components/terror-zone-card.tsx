@@ -1,4 +1,5 @@
 import { areas } from "@/data/area";
+import type { TerrorZone } from "@/types/terror-zone";
 import { StyleSheet, View } from "react-native";
 import { ThemedText } from "./themed-text";
 import { ThemedView } from "./themed-view";
@@ -15,17 +16,6 @@ const IMMUNITY_COLORS: Record<string, string> = {
 function formatUnixTime(unixSeconds: number) {
   return new Date(unixSeconds * 1000).toLocaleString();
 }
-
-type TerrorZone = {
-  time: number;
-  zone_name: string[];
-  immunities: string[];
-  "tier-exp": string;
-  "tier-loot": string;
-  area_id: number;
-  area_ids: number[];
-  end_time: number;
-};
 
 type TerrorZoneCardProps = {
   label: string;
@@ -88,10 +78,8 @@ const styles = StyleSheet.create({
   },
   card: {
     borderWidth: 1,
-    borderColor: "rgba(0,0,0,0.1)",
     borderRadius: 16,
     padding: 16,
-    backgroundColor: "rgba(255,255,255,1)",
     gap: 8,
   },
   cardLabel: {

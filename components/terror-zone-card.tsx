@@ -3,6 +3,15 @@ import { StyleSheet, View } from "react-native";
 import { ThemedText } from "./themed-text";
 import { ThemedView } from "./themed-view";
 
+const IMMUNITY_COLORS: Record<string, string> = {
+  f: "#ef4444", // 빨강
+  c: "#3b82f6", // 파랑
+  l: "#facc15", // 노랑
+  p: "#22c55e", // 초록
+  ph: "#9ca3af", // 회색
+  m: "#f97316", // 주황
+};
+
 function formatUnixTime(unixSeconds: number) {
   return new Date(unixSeconds * 1000).toLocaleString();
 }
@@ -32,23 +41,36 @@ export function TerrorZoneCard({ label, zone }: TerrorZoneCardProps) {
       <ThemedText type="subtitle" style={styles.cardLabel}>
         {label}
       </ThemedText>
+
       <ThemedText type="title" style={styles.zoneName}>
         {koName}
       </ThemedText>
+
       <View style={styles.row}>
         <ThemedText type="defaultSemiBold">경험치</ThemedText>
         <ThemedText>{zone["tier-exp"]}</ThemedText>
       </View>
+
       <View style={styles.row}>
         <ThemedText type="defaultSemiBold">드랍</ThemedText>
         <ThemedText>{zone["tier-loot"]}</ThemedText>
       </View>
+
       <View style={styles.row}>
         <ThemedText type="defaultSemiBold">면역</ThemedText>
-        <ThemedText numberOfLines={1} ellipsizeMode="tail">
-          {zone.immunities.join(", ")}
-        </ThemedText>
+        <View style={styles.immunityRow}>
+          {zone.immunities.map((code) => (
+            <View
+              key={code}
+              style={[
+                styles.immunityDot,
+                { backgroundColor: IMMUNITY_COLORS[code] ?? "#6b7280" },
+              ]}
+            />
+          ))}
+        </View>
       </View>
+
       <View style={styles.row}>
         <ThemedText type="defaultSemiBold">시간</ThemedText>
         <View>
@@ -82,7 +104,19 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "flex-start",
     gap: 8,
+  },
+  immunityRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 4,
+  },
+  immunityDot: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: "rgba(0,0,0,0.3)",
   },
 });

@@ -1,3 +1,4 @@
+import { BorderWidth } from "@/constants/border";
 import { areas } from "@/data/area";
 import type { TerrorZone } from "@/types/terror-zone";
 import { StyleSheet, View } from "react-native";
@@ -27,7 +28,7 @@ export function TerrorZoneCard({ label, zone }: TerrorZoneCardProps) {
   const koName = (areas as any)[zoneKey]?.ko ?? zoneKey.replaceAll("_", " ");
 
   return (
-    <ThemedView style={styles.card}>
+    <ThemedView style={[styles.card, { borderWidth: BorderWidth.thin }]}>
       <ThemedText type="subtitle" style={styles.cardLabel}>
         {label}
       </ThemedText>

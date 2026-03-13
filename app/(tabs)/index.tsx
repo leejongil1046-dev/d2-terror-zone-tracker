@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { TerrorZoneCard } from "@/components/terror-zone-card";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import { BorderWidth } from "@/constants/border";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import type { TerrorZone } from "@/types/terror-zone";
 
@@ -42,7 +43,15 @@ export default function HomeScreen() {
   return (
     <SafeAreaView style={styles.safeArea} edges={["top"]}>
       <ThemedView style={styles.container}>
-        <View style={[styles.header, { borderBottomColor: headerBorderColor }]}>
+        <View
+          style={[
+            styles.header,
+            {
+              borderBottomColor: headerBorderColor,
+              borderBottomWidth: BorderWidth.thin,
+            },
+          ]}
+        >
           <ThemedText type="title">공포의 영역 트래커</ThemedText>
           <ThemedText type="default" style={styles.subtitle}>
             Diablo II: Resurrected Terror Zone
@@ -91,7 +100,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 12,
     paddingBottom: 16,
-    borderBottomWidth: 1,
   },
   subtitle: {
     marginTop: 4,

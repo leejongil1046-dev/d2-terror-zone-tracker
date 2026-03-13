@@ -1,16 +1,16 @@
-import { Image } from 'expo-image';
-import { StyleSheet, View } from 'react-native';
+import { Image } from "expo-image";
+import { StyleSheet, View } from "react-native";
 
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
+import ParallaxScrollView from "@/components/parallax-scroll-view";
+import { ThemedText } from "@/components/themed-text";
+import { ThemedView } from "@/components/themed-view";
 
 type TerrorZone = {
   time: number;
   zone_name: string[];
   immunities: string[];
-  'tier-exp': string;
-  'tier-loot': string;
+  "tier-exp": string;
+  "tier-loot": string;
   area_id: number;
   area_ids: number[];
   end_time: number;
@@ -19,20 +19,20 @@ type TerrorZone = {
 const MOCK_TERROR_ZONES: TerrorZone[] = [
   {
     time: 1769986800,
-    zone_name: ['Tal_Rashas_Tomb', 'Tal_Rashas_Chamber'],
-    immunities: ['f', 'c', 'l', 'p', 'ph', 'm'],
-    'tier-exp': 'S',
-    'tier-loot': 'A',
+    zone_name: ["Tal_Rashas_Tomb", "Tal_Rashas_Chamber"],
+    immunities: ["f", "c", "l", "p", "ph", "m"],
+    "tier-exp": "S",
+    "tier-loot": "A",
     area_id: 66,
     area_ids: [66, 67, 68, 69, 70, 71, 72, 73],
     end_time: 1769990400,
   },
   {
     time: 1769983200,
-    zone_name: ['Ancients_Way', 'Icy_Cellar'],
-    immunities: ['c', 'l', 'p', 'ph'],
-    'tier-exp': 'C',
-    'tier-loot': 'C',
+    zone_name: ["Ancients_Way", "Icy_Cellar"],
+    immunities: ["c", "l", "p", "ph"],
+    "tier-exp": "C",
+    "tier-loot": "C",
     area_id: 118,
     area_ids: [118, 119],
     end_time: 1769986800,
@@ -49,13 +49,14 @@ export default function HomeScreen() {
 
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ light: '#0f172a', dark: '#020617' }}
+      headerBackgroundColor={{ light: "#0f172a", dark: "#020617" }}
       headerImage={
         <Image
-          source={require('@/assets/images/partial-react-logo.png')}
+          source={require("@/assets/images/partial-react-logo.png")}
           style={styles.reactLogo}
         />
-      }>
+      }
+    >
       <ThemedView style={styles.screenContainer}>
         <ThemedText type="title">공포의 영역 트래커</ThemedText>
         <ThemedText type="default" style={styles.subtitle}>
@@ -67,27 +68,28 @@ export default function HomeScreen() {
             현재 공포의 영역
           </ThemedText>
           <ThemedText type="title" style={styles.zoneName}>
-            {current.zone_name.join(' · ')}
+            {current.zone_name.join(" · ")}
           </ThemedText>
 
           <View style={styles.row}>
             <ThemedText type="defaultSemiBold">경험치</ThemedText>
-            <ThemedText>{current['tier-exp']}</ThemedText>
+            <ThemedText>{current["tier-exp"]}</ThemedText>
           </View>
           <View style={styles.row}>
             <ThemedText type="defaultSemiBold">드랍</ThemedText>
-            <ThemedText>{current['tier-loot']}</ThemedText>
+            <ThemedText>{current["tier-loot"]}</ThemedText>
           </View>
           <View style={styles.row}>
             <ThemedText type="defaultSemiBold">면역</ThemedText>
             <ThemedText numberOfLines={1} ellipsizeMode="tail">
-              {current.immunities.join(', ')}
+              {current.immunities.join(", ")}
             </ThemedText>
           </View>
           <View style={styles.row}>
             <ThemedText type="defaultSemiBold">시간</ThemedText>
             <ThemedText>
-              {formatUnixTime(current.time)} ~ {formatUnixTime(current.end_time)}
+              {formatUnixTime(current.time)} ~{" "}
+              {formatUnixTime(current.end_time)}
             </ThemedText>
           </View>
         </ThemedView>
@@ -97,12 +99,12 @@ export default function HomeScreen() {
             다음 공포의 영역 (예시)
           </ThemedText>
           <ThemedText type="defaultSemiBold" style={styles.zoneNameSecondary}>
-            {next.zone_name.join(' · ')}
+            {next.zone_name.join(" · ")}
           </ThemedText>
           <View style={styles.row}>
             <ThemedText type="defaultSemiBold">경험치 / 드랍</ThemedText>
             <ThemedText>
-              {next['tier-exp']} / {next['tier-loot']}
+              {next["tier-exp"]} / {next["tier-loot"]}
             </ThemedText>
           </View>
         </ThemedView>
@@ -122,13 +124,13 @@ const styles = StyleSheet.create({
   card: {
     borderRadius: 16,
     padding: 16,
-    backgroundColor: 'rgba(15,23,42,0.9)',
+    backgroundColor: "rgba(15,23,42,0.9)",
     gap: 8,
   },
   cardSecondary: {
     borderRadius: 16,
     padding: 14,
-    backgroundColor: 'rgba(15,23,42,0.5)',
+    backgroundColor: "rgba(15,23,42,0.5)",
     gap: 6,
   },
   cardLabel: {
@@ -142,9 +144,9 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     gap: 8,
   },
   reactLogo: {
@@ -152,6 +154,6 @@ const styles = StyleSheet.create({
     width: 290,
     bottom: 0,
     left: 0,
-    position: 'absolute',
+    position: "absolute",
   },
 });

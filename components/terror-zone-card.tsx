@@ -1,3 +1,4 @@
+import { areas } from "@/data/area";
 import { StyleSheet, View } from "react-native";
 import { ThemedText } from "./themed-text";
 import { ThemedView } from "./themed-view";
@@ -23,15 +24,17 @@ type TerrorZoneCardProps = {
 };
 
 export function TerrorZoneCard({ label, zone }: TerrorZoneCardProps) {
+  const zoneKey = zone.zone_name[0]; // 예: "Blood_Moor"
+  const koName = (areas as any)[zoneKey]?.ko ?? zoneKey.replaceAll("_", " ");
+
   return (
     <ThemedView style={styles.card}>
       <ThemedText type="subtitle" style={styles.cardLabel}>
         {label}
       </ThemedText>
       <ThemedText type="title" style={styles.zoneName}>
-        {zone.zone_name.join(" · ")}
+        {koName}
       </ThemedText>
-
       <View style={styles.row}>
         <ThemedText type="defaultSemiBold">경험치</ThemedText>
         <ThemedText>{zone["tier-exp"]}</ThemedText>
@@ -48,9 +51,10 @@ export function TerrorZoneCard({ label, zone }: TerrorZoneCardProps) {
       </View>
       <View style={styles.row}>
         <ThemedText type="defaultSemiBold">시간</ThemedText>
-        <ThemedText>
-          {formatUnixTime(zone.time)} ~ {formatUnixTime(zone.end_time)}
-        </ThemedText>
+        <View>
+          <ThemedText>{formatUnixTime(zone.time)}</ThemedText>
+          <ThemedText>{formatUnixTime(zone.end_time)}</ThemedText>
+        </View>
       </View>
     </ThemedView>
   );
@@ -78,7 +82,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
+    alignItems: "flex-start",
     gap: 8,
   },
 });

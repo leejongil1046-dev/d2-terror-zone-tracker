@@ -45,8 +45,8 @@ export default function HomeScreen() {
     fetchZones();
   }, []);
 
-  const current = zones?.[0];
-  const next = zones?.[1];
+  const current = zones?.[1];
+  const next = zones?.[0];
 
   return (
     <ParallaxScrollView

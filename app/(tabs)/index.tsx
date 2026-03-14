@@ -79,10 +79,6 @@ export default function HomeScreen() {
             <TerrorZoneCard label="현재 공포의 영역" zone={current} isCurrent />
           )}
           {next && <TerrorZoneCard label="다음 공포의 영역" zone={next} />}
-          {current && (
-            <TerrorZoneCard label="현재 공포의 영역" zone={current} isCurrent />
-          )}
-          {next && <TerrorZoneCard label="다음 공포의 영역" zone={next} />}
         </ScrollView>
       </ThemedView>
     </SafeAreaView>

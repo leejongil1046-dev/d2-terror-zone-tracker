@@ -15,7 +15,15 @@ const IMMUNITY_COLORS: Record<string, string> = {
 };
 
 function formatUnixTime(unixSeconds: number) {
-  return new Date(unixSeconds * 1000).toLocaleString();
+  const d = new Date(unixSeconds * 1000);
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  const h = d.getHours();
+  const min = String(d.getMinutes()).padStart(2, "0");
+  const hour12 = String(h % 12 || 12).padStart(2, "0");
+  const ampm = h < 12 ? "AM" : "PM";
+  return `${y}.${m}.${day} ${hour12}:${min} ${ampm}`;
 }
 
 type TerrorZoneCardProps = {
